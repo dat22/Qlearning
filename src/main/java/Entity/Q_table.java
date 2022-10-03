@@ -8,10 +8,20 @@ public class Q_table implements Cloneable{
 
     public Q_table(int n) {
         this.n = n;
-        value = new double[n][n];
+        this.value = new double[n][n];
         for(int i = 0; i < n; i ++){
             for(int j = 0; j < n; j ++){
-                value[i][j] = 0;
+                this.value[i][j] = 0;
+            }
+        }
+    }
+
+    public Q_table(int n, double[][] V) {
+        this.n = n;
+        this.value = new double[n][n];
+        for(int i = 0; i < n; i ++){
+            for(int j = 0; j < n; j ++) {
+                this.value[i][j] = V[i][j];
             }
         }
     }
@@ -78,7 +88,7 @@ public class Q_table implements Cloneable{
             // updating Q
             double upd_val = get_val(current, next_visit) + lr * (reward + gamma * argmax
             - get_val(current, next_visit));
-            set_val(current, next_visit, upd_val);
+            this.set_val(current, next_visit, upd_val);
         }
     }
 

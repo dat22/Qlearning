@@ -2,9 +2,9 @@ package main.java.Models;
 
 import main.java.Data.Input_Data;
 import main.java.Entity.Q_table;
-
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 /*
 EPOCHS = 4000
 LEARNING_RATE = 0.2
@@ -15,40 +15,39 @@ EPSILON = 0.1
 public class Qlearning_framework {
     private Input_Data inputData;
     private double[][] distance;
-    private Q_table wakanda;
-    private int epochs = 10000;
-    private float epsilon = 0.35f;
+    private Q_table Qtable;
+    private int epochs = 20000;
+    private float epsilon = 0.1f;
     private float gamma = 0.95f;
     private float lr = 0.2f;
-    public Qlearning_framework() throws IOException {
-        inputData = new Input_Data();
+    public Qlearning_framework(String arg) throws IOException {
+        inputData = new Input_Data(arg);
         distance = inputData.Distance();
-        wakanda = new Q_table(inputData.getSize());
+        Qtable = new Q_table(inputData.getSize());
     }
 
     public void Q_learning() throws CloneNotSupportedException {
-        int n = inputData.getSize();
-        Q_table CompQtable = (Q_table) ((Q_table)wakanda).clone();
-        for (int ep = 0; ep < epochs; ep ++) {
-            System.out.println("Copy" + " " + CompQtable.get_val(0, 1));
-            System.out.println("real " + wakanda.get_val(0, 1));
-            CompQtable.eps_greedy_update(distance, epsilon, gamma, lr); // upd
-            System.out.println("Copy" + " " + CompQtable.get_val(0, 1));
-            System.out.println("real " + wakanda.get_val(0, 1));
-            double greedy_cost = wakanda.compute_value_of_q_table(distance); //calc
-            double greedy_cost_comp = CompQtable.compute_value_of_q_table(distance);
-            System.out.println("Copy" + " " + CompQtable.get_val(0, 1));
-            System.out.println("real " + wakanda.get_val(0, 1));
-            if (greedy_cost_comp < greedy_cost) {
-                wakanda = (Q_table) ((Q_table)CompQtable).clone();
+        File file = new File("output.csv");
+        try {
+            FileWriter outputfile = new FileWriter(file);
+            int n = inputData.getSize();
+            Q_table CompQtable = new Q_table(Qtable.getN(), Qtable.getValue());
+            for (int ep = 0; ep < epochs; ep++) {
+                CompQtable.eps_greedy_update(distance, epsilon, gamma, lr); // upd
+                double greedy_cost = Qtable.compute_value_of_q_table(distance); //calc
+                double greedy_cost_comp = CompQtable.compute_value_of_q_table(distance);
+                if (greedy_cost_comp < greedy_cost) {
+                    Qtable = new Q_table(CompQtable.getN(), CompQtable.getValue());
+                }
+                outputfile.write(ep + ": " + greedy_cost + " " + greedy_cost_comp + "\n");
             }
-            break;
+            outputfile.close();
         }
-        System.out.println(wakanda.compute_value_of_q_table(distance));
-        int[] fx = wakanda.greedy_road();
-        for(int x : fx){
-            System.out.print(x + " ");
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        System.out.println(Qtable.compute_value_of_q_table(distance));
     }
     public void display(){
 //        int n = inputData.getSize();

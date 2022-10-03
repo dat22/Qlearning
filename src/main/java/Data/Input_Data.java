@@ -8,9 +8,9 @@ import java.util.Scanner;
 public class Input_Data {
     private int n;
     private double[][] distance;
-    public Input_Data() throws IOException {
+    public Input_Data(String arg) throws IOException {
         System.out.println("Read input");
-        String url = "./src/main/java/Data/Distance_Data.txt";
+        String url = "./src/main/java/Data/" + arg;
         FileInputStream fileInputStream = new FileInputStream(url);
         Scanner sc = new Scanner(fileInputStream);
         n = sc.nextInt();
