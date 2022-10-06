@@ -83,7 +83,7 @@ public class Q_table implements Cloneable{
                 mask.remove(Integer.valueOf(next_visit));
                 route.add(next_visit);
                 reward = -distance[current][next_visit];
-                argmax = argmax_value(next_visit, mask);
+                argmax = argmax_value(next_visit, mask); ///
             }
             // updating Q
             double upd_val = get_val(current, next_visit) + lr * (reward + gamma * argmax
