@@ -1,2 +1,2 @@
 # Qlearning
-Apply Qlearning to solve traveling sale man
+Apply Qlearning to solve traveling sale man problem
