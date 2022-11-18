@@ -1,11 +1,12 @@
 package main.java.Entity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Q_table implements Cloneable{
     private double[][] value;
     private int n; // in this problem, n=m
-
+    Random generator = new Random();
     public Q_table(int n) {
         this.n = n;
         this.value = new double[n][n];
@@ -70,12 +71,12 @@ public class Q_table implements Cloneable{
                 next_visit = mask.get(0);
                 reward = -distance[current][next_visit];
                 // Reward for finishing the route
-                argmax = -distance[next_visit][route.get(0)];
+                argmax = get_val(next_visit,  route.get(0));//-distance[next_visit][route.get(0)];
             }
             else {
-                double u = Math.random();
+                double u = generator.nextDouble();
                 if (u < epsilon) {
-                    next_visit = mask.get((int) (Math.random() * mask.size()));
+                    next_visit = mask.get((int) (generator.nextDouble() * mask.size()));
                 } else {
                     next_visit = argmax_city(current, mask);
                 }

@@ -16,15 +16,13 @@ public class Qlearning_framework {
     private Input_Data inputData;
     private double[][] distance;
     private Q_table Qtable;
-    private int epochs = 5000;
+    private int epochs = 1000000;
     private float epsilon = 0.9f;
-    private float epsilon_decay = 0.999f;
+    private float epsilon_decay = 1f;
     private float epsilon_min = 0.1f;
     private int exploit_time = 0;
-    // explore rate, when agent dont know about environment
-    // agent will go randomly action
-    private float gamma = 0.95f;
-    private float lr = 0.2f;
+    private float gamma = 0.8f;
+    private float lr = 0.00001f;
     public Qlearning_framework(String arg) throws IOException {
         inputData = new Input_Data(arg);
         distance = inputData.Distance();
@@ -47,11 +45,12 @@ public class Qlearning_framework {
                 CompQtable.eps_greedy_update(distance, epsilon, gamma, lr); // upd
                 double greedy_cost = Qtable.compute_value_of_q_table(distance); //calc
                 double greedy_cost_comp = CompQtable.compute_value_of_q_table(distance);
-                if (greedy_cost_comp < greedy_cost) {
+                if (greedy_cost_comp <= greedy_cost) {
                     Qtable = new Q_table(CompQtable.getN(), CompQtable.getValue());
+                    System.out.println(ep + " " + greedy_cost_comp);
                 }
-                if(ep % 1 == 0)
-                    outputfile.write(ep + ","  + greedy_cost + "," + greedy_cost_comp + "\n");
+//                if(ep % 1 == 0)
+//                    outputfile.write(ep + ","  + greedy_cost + "," + greedy_cost_comp + "\n");
             }
             outputfile.close();
         }
@@ -62,6 +61,9 @@ public class Qlearning_framework {
 //        System.out.println(epsilon);
         System.out.println(epsilon);
         System.out.println(Qtable.compute_value_of_q_table(distance));
+        int[] t = Qtable.greedy_road();
+        for(int x : t)
+            System.out.print(x + " ");
     }
     public void display(){
 //        int n = inputData.getSize();
