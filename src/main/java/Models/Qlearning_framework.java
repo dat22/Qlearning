@@ -16,12 +16,12 @@ public class Qlearning_framework {
     private Input_Data inputData;
     private double[][] distance;
     private Q_table Qtable;
-    private int epochs = 1000000;
+    private int epochs = 5000000;
     private float epsilon = 0.9f;
     private float epsilon_decay = 1f;
     private float epsilon_min = 0.1f;
     private int exploit_time = 0;
-    private float gamma = 0.8f;
+    private float gamma = 0.9f;
     private float lr = 0.00001f;
     public Qlearning_framework(String arg) throws IOException {
         inputData = new Input_Data(arg);
